@@ -3,7 +3,7 @@ name_lower = name.lower()
 # name = name.strip()
 name_set = set(name_lower)
 count =0
-for x in name:
+for x in name_set:
     if (x=='a' or x=='e' or x=='i'  or x=='o' or x=='u'):
         count+=1
 
