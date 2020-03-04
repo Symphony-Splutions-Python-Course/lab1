@@ -1,1 +1,0 @@
-print ("Zdravo, veli Marin")

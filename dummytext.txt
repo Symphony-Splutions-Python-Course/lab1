@@ -1,0 +1,10 @@
+Once upon 
+a time there
+was an assignment
+which read
+
+to figure out how many
+lines in a file
+whilst counting
+the words and
+the letters
