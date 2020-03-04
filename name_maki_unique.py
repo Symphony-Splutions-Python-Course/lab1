@@ -22,3 +22,4 @@ for i in range(len(name)):
 
 print("Your name {} has {} unique letters, of which {} are unique vowels".format(name, num_letters, num_vowels))
 
+
