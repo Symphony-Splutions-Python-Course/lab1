@@ -8,4 +8,14 @@ name = name.strip()
 # are in your name, and how many 
 # of them are vowels: ['a'. 'e', 'i', 'o', 'u', 'y']
 
-print("Your'r name {} has {} letters, of which {} vowels".format(1, 2, 3))
+VOWELS = ['a', 'e', 'i', 'o', 'u', 'y']
+
+letters_count = len(name)
+vowels_count = 0
+for letter in name:
+    if letter in VOWELS:
+        vowels_count += 1
+
+print("Your'r name {} has {} letters, of which {} vowels".format(name,
+                                                                 letters_count,
+                                                                 vowels_count))
