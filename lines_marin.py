@@ -1,0 +1,7 @@
+f = open("lab1/dummytext.txt","r")
+data = f.read()
+number_of_lines = len(data.split("\n"))
+number_of_chars = len(data)
+number_of_words = data.split() 
+print(number_of_lines, len(number_of_words), number_of_chars)
+f.close()
