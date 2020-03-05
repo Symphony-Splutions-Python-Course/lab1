@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/env python3
 
 import sys
@@ -52,3 +53,5 @@ def stats(filename):
 if __name__ == "__main__":
     main()
 
+=======
+>>>>>>> cfa4b90954af1d00300f1d7ff6a8afacb09f5318
