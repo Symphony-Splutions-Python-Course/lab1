@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import os
 import sys
 
 
@@ -10,7 +11,22 @@ def main():
             text_stats = stats(filename)
             print(" {}  {} {} {}".format(*text_stats))
     else:
-        print("HERE COMES SYS INPUT!")
+        content = sys.stdin.read()
+        text_stats = content_stats(content)
+        text_stats.append(len(content))
+        text_stats.append(" - ")
+
+        print(" {}  {} {} {}".format(*text_stats))
+        
+
+def content_stats(file_content):
+    lines = file_content.splitlines()
+    words = file_content.split()
+
+    lines_count = len(lines)
+    words_count = len(words)
+
+    return [lines_count, words_count]
 
 def stats(filename):
     """This function returns four values:
@@ -20,20 +36,16 @@ def stats(filename):
     - file name
     """
 
-    # import ipdb; ipdb.set_trace()
     try:
         with open(filename, "r") as file:
             file_content = file.read()
-            lines = file_content.splitlines()
-            words = file_content.split()
+            file_stats = content_stats(file_content)
+            length = os.path.getsize(filename)
+            file_stats.append(length)
+            file_stats.append(file.name)
 
-            lines_count = len(lines)
-            words_count = len(words)
+        return file_stats
 
-            file_size = file.seek(0, 2)
-            file_name = file.name
-
-        return [lines_count, words_count, file_size, file_name]
     except FileNotFoundError as fnf_error:
         print("{}: {}".format(fnf_error.args[1], fnf_error.filename))
         # exit()
