@@ -73,7 +73,7 @@ for x in range(2):
     for zharko in tekst1:
         count =tekst1.count(zharko)
         vowel_counts[zharko] = count
-    print(vowel_counts)
+        print(vowel_counts)
 
 print(data_render) 
 
