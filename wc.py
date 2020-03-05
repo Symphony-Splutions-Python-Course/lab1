@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 #!/usr/bin/env python3
 
 import sys
@@ -8,13 +7,19 @@ def main():
     if len(sys.argv) > 1:
         for filename in sys.argv[1:]:
             text_stats = stats(filename)
-            print(" {}  {} {} {}".format(*text_stats))
+            try:
+                print(" {}  {} {} {}".format(*text_stats))
+            except:
+                print("")
+
     else:
         content = sys.stdin.read()
         text_stats = content_stats(content)
         text_stats.append(" - ")
-
-        print(" {}  {} {} {}".format(*text_stats))
+        try:
+            print(" {}  {} {} {}".format(*text_stats))
+        except:
+            print("")
 
 
 def content_stats(content):
@@ -52,6 +57,3 @@ def stats(filename):
 
 if __name__ == "__main__":
     main()
-
-=======
->>>>>>> cfa4b90954af1d00300f1d7ff6a8afacb09f5318
