@@ -2,21 +2,38 @@
 
 import sys
 
-filename = sys.argv[1]
-with open(filename, "r") as file:
-    book = file.read()
-    
-    lines = book.splitlines()
-    words = book.split()
 
-    chars = 0
+def main():
+    if len(sys.argv) > 1:
+        filename = sys.argv[1]
+        text_stats = stats(filename)
+        print(" {}  {} {} {}".format(*text_stats))
+    else:
+        print("HERE COMES SYS INPUT!")
 
-    for word in words:
-        chars = chars + len(word)
-    
-    l = str(len(lines)).rjust(10)
-    w = str(len(words)).rjust(10)
-    c = str(chars).rjust(10)
+def stats(filename):
+    """This function returns four values:
+    - lines in the file,
+    - words in the file,
+    - size of the file,
+    - file name
+    """
+    try:
+        with open(filename, "r") as file:
+            file_content = file.read()
+            lines = file_content.splitlines()
+            words = file_content.split()
 
+            lines_count = len(lines)
+            words_count = len(words)
+            text_stats = stats(filename)
 
-    print(l, w, c, file.name)
+            file_size = file.seek(0, 2)
+            file_name = file.name
+
+        return lines_count, words_count, file_size, file_name
+    except FileNotFoundError as fnf_error:
+        print(fnf_error)
+
+if __name__ == "__main__":
+    main()
