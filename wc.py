@@ -6,54 +6,39 @@ import sys
 def main():
     if len(sys.argv) > 1:
         for filename in sys.argv[1:]:
-            text_stats = stats(filename)
-            try:
-                print(" {}  {} {} {}".format(*text_stats))
-            except:
-                print("")
+            print(filename)
+            #here we should go for every given filename.
+        exit()
 
+        filename = sys.argv[1]
+        text_stats = stats(filename)
+        print(" {}  {} {} {}".format(*text_stats))
     else:
-        content = sys.stdin.read()
-        text_stats = content_stats(content)
-        text_stats.append(" - ")
-        try:
-            print(" {}  {} {} {}".format(*text_stats))
-        except:
-            print("")
-
-
-def content_stats(content):
-    lines = content.splitlines()
-    words = content.split()
-
-    lines_count = len(lines)
-    words_count = len(words)
-    chars_count = len(content)
-
-    return [lines_count, words_count, chars_count]
-
+        print("HERE COMES SYS INPUT!")
 
 def stats(filename):
-    """This function returns three values:
-    - lines in the passed string,
-    - words in the passed string,
-    - size of the passed string,
+    """This function returns four values:
+    - lines in the file,
+    - words in the file,
+    - size of the file,
+    - file name
     """
-
     try:
         with open(filename, "r") as file:
-            content = file.read()
-            stats = content_stats(content)
-            stats.append(file.name)
-        return stats
+            file_content = file.read()
+            lines = file_content.splitlines()
+            words = file_content.split()
+
+            lines_count = len(lines)
+            words_count = len(words)
+            
+
+            file_size = file.seek(0, 2)
+            file_name = file.name
+
+        return lines_count, words_count, file_size, file_name
     except FileNotFoundError as fnf_error:
-        error = "{}: {}\n".format(fnf_error.args[1], fnf_error.filename)
-        sys.stderr.write(error)
-        exit(fnf_error.errno)
-    except PermissionError as perm_error:
-        error = "{}: {}\n".format(perm_error.args[1], perm_error.filename)
-        sys.stderr.write(error)
-        exit(perm_error.errno)
+        print(fnf_error)
 
 if __name__ == "__main__":
     main()
