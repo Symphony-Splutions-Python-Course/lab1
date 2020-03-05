@@ -7,19 +7,13 @@ def main():
     if len(sys.argv) > 1:
         for filename in sys.argv[1:]:
             text_stats = stats(filename)
-            try:
+            if text_stats:
                 print(" {}  {} {} {}".format(*text_stats))
-            except:
-                print("")
-
     else:
         content = sys.stdin.read()
         text_stats = content_stats(content)
         text_stats.append(" - ")
-        try:
-            print(" {}  {} {} {}".format(*text_stats))
-        except:
-            print("")
+        print(" {}  {} {} {}".format(*text_stats))
 
 
 def content_stats(content):
@@ -49,11 +43,11 @@ def stats(filename):
     except FileNotFoundError as fnf_error:
         error = "{}: {}\n".format(fnf_error.args[1], fnf_error.filename)
         sys.stderr.write(error)
-        exit(fnf_error.errno)
+        # exit(fnf_error.errno)
     except PermissionError as perm_error:
         error = "{}: {}\n".format(perm_error.args[1], perm_error.filename)
         sys.stderr.write(error)
-        exit(perm_error.errno)
+        # exit(perm_error.errno)
 
 if __name__ == "__main__":
     main()
