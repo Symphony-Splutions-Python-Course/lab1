@@ -51,6 +51,9 @@ def stats(filename):
     except UnicodeDecodeError as ud_error:
         ud_error = "Binary file\n"
         sys.stderr.write(ud_error)
+        error = "Binary File"
+        sys.stderr.write(error)
+
 
 if __name__ == "__main__":
     main()
