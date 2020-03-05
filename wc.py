@@ -1,11 +1,9 @@
 #!/usr/bin/env python3
 
-import os
 import sys
 
 
 def main():
-    # import ipdb; ipdb.set_trace()
     if len(sys.argv) > 1:
         for filename in sys.argv[1:]:
             text_stats = stats(filename)
@@ -13,20 +11,21 @@ def main():
     else:
         content = sys.stdin.read()
         text_stats = content_stats(content)
-        text_stats.append(len(content))
         text_stats.append(" - ")
 
         print(" {}  {} {} {}".format(*text_stats))
-        
 
-def content_stats(file_content):
-    lines = file_content.splitlines()
-    words = file_content.split()
+
+def content_stats(content):
+    lines = content.splitlines()
+    words = content.split()
 
     lines_count = len(lines)
     words_count = len(words)
+    chars_count = len(content)
 
-    return [lines_count, words_count]
+    return [lines_count, words_count, chars_count]
+
 
 def stats(filename):
     """This function returns four values:
@@ -38,22 +37,18 @@ def stats(filename):
 
     try:
         with open(filename, "r") as file:
-            file_content = file.read()
-            file_stats = content_stats(file_content)
-            length = os.path.getsize(filename)
-            file_stats.append(length)
-            file_stats.append(file.name)
-
-        return file_stats
-
+            content = file.read()
+            stats = content_stats(content)
+            stats.append(file.name)
+        return stats
     except FileNotFoundError as fnf_error:
-        print("{}: {}".format(fnf_error.args[1], fnf_error.filename))
-        # exit()
+        error = "{}: {}\n".format(fnf_error.args[1], fnf_error.filename)
+        sys.stderr.write(error)
+        exit(fnf_error.errno)
     except PermissionError as perm_error:
-        print("{}: {}".format(perm_error.args[1], perm_error.filename))
-        # exit()
-    else:
-        print("DONE")
+        error = "{}: {}\n".format(perm_error.args[1], perm_error.filename)
+        sys.stderr.write(error)
+        exit(perm_error.errno)
 
 if __name__ == "__main__":
     main()
