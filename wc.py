@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
 
 import sys
-
+import os
 
 def main():
     if len(sys.argv) > 1:
         for filename in sys.argv[1:]:
+            if not os.path.isfile(filename):
+                continue
             text_stats = stats(filename)
             try:
                 print(" {}  {} {} {}".format(*text_stats))
