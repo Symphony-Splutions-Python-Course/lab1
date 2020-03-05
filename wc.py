@@ -28,11 +28,10 @@ def content_stats(content):
 
 
 def stats(filename):
-    """This function returns four values:
-    - lines in the file,
-    - words in the file,
-    - size of the file,
-    - file name
+    """This function returns three values:
+    - lines in the passed string,
+    - words in the passed string,
+    - size of the passed string,
     """
 
     try:
