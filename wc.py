@@ -48,9 +48,7 @@ def stats(filename):
         error = "{}: {}\n".format(perm_error.args[1], perm_error.filename)
         sys.stderr.write(error)
         # exit(perm_error.errno)
-    except UnicodeDecodeError as ud_error:
-        ud_error = "Binary file\n"
-        sys.stderr.write(ud_error)
+    except UnicodeDecodeError as error:
         error = "Binary File"
         sys.stderr.write(error)
 
