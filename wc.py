@@ -5,6 +5,11 @@ import sys
 
 def main():
     if len(sys.argv) > 1:
+        for filename in sys.argv[1:]:
+            print(filename)
+            #here we should go for every given filename.
+        exit()
+
         filename = sys.argv[1]
         text_stats = stats(filename)
         print(" {}  {} {} {}".format(*text_stats))
