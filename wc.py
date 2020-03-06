@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 
 import sys
 import os
+
 
 def main():
     if len(sys.argv) > 1:
@@ -20,6 +22,10 @@ def main():
 
 
 def content_stats(content):
+    if type(content) != str:
+        print("Content is not a string")
+        exit(1)
+
     lines = content.splitlines()
     words = content.split()
 
@@ -46,11 +52,9 @@ def stats(filename):
     except FileNotFoundError as fnf_error:
         error = "{}: {}\n".format(fnf_error.args[1], fnf_error.filename)
         sys.stderr.write(error)
-        # exit(fnf_error.errno)
     except PermissionError as perm_error:
         error = "{}: {}\n".format(perm_error.args[1], perm_error.filename)
         sys.stderr.write(error)
-        # exit(perm_error.errno)
     except UnicodeDecodeError as error:
         error = "Binary File"
         sys.stderr.write(error)
