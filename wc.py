@@ -1,11 +1,14 @@
 #!/usr/bin/env python3
 
 import sys
-
+import os
 
 def main():
     if len(sys.argv) > 1:
         for filename in sys.argv[1:]:
+            if not os.path.isfile(filename):
+                print(filename, " is not a file")
+                continue
             text_stats = stats(filename)
             if text_stats:
                 print(" {}  {} {} {}".format(*text_stats))
