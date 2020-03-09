@@ -57,7 +57,9 @@ def gameLoop():
  
     foodx = round(random.randrange(0, dis_width - snake_block) / 10.0) * 10.0
     foody = round(random.randrange(0, dis_height - snake_block) / 10.0) * 10.0
- 
+    blockx = round(random.randrange(0, dis_width - snake_block) / 10.0) * 10.0
+    blocky = round(random.randrange(0, dis_height - snake_block) / 10.0) * 10.0
+
     while not game_over:
  
         while game_close == True:
@@ -78,16 +80,16 @@ def gameLoop():
             if event.type == pygame.QUIT:
                 game_over = True
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_LEFT:
+                if event.key == pygame.K_LEFT or event.key == ord('a'):
                     x1_change = -snake_block
                     y1_change = 0
-                elif event.key == pygame.K_RIGHT:
+                elif event.key == pygame.K_RIGHT or event.key == ord('d'):
                     x1_change = snake_block
                     y1_change = 0
-                elif event.key == pygame.K_UP:
+                elif event.key == pygame.K_UP or event.key == ord('w'):
                     y1_change = -snake_block
                     x1_change = 0
-                elif event.key == pygame.K_DOWN:
+                elif event.key == pygame.K_DOWN or event.key == ord('s'):
                     y1_change = snake_block
                     x1_change = 0
  
@@ -97,6 +99,7 @@ def gameLoop():
         y1 += y1_change
         dis.fill(red)
         pygame.draw.rect(dis, green, [foodx, foody, snake_block, snake_block])
+        pygame.draw.rect(dis, yellow, [blockx, blocky, snake_block, snake_block])
         snake_Head = []
         snake_Head.append(x1)
         snake_Head.append(y1)
@@ -117,9 +120,13 @@ def gameLoop():
             foodx = round(random.randrange(0, dis_width - snake_block) / 10.0) * 10.0
             foody = round(random.randrange(0, dis_height - snake_block) / 10.0) * 10.0
             Length_of_snake += 1
- 
+        
         clock.tick(snake_speed)
- 
+        if x1 == blockx and y1 == blocky:
+           
+           # blockx = round(random.randrange(0, dis_height - snake_block) / 5.0) * 10.0
+            #blocky = round(random.randrange(0, dis_height - snake_block) / 5.0) * 10.0
+            game_close = True
     pygame.quit()
     quit()
  
