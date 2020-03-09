@@ -41,11 +41,8 @@ for item in zborovi:
     else:
         niza[item]=1
 
-<<<<<<< HEAD
-=======
 
 {k: v for k, v in sorted(niza.items(), key=lambda item: item[1])}
->>>>>>> master
 print(niza)
 
 

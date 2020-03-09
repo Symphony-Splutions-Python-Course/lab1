@@ -1,0 +1,4 @@
+asd.pyc
+asd.pyo
+FILE
+ls.txt
