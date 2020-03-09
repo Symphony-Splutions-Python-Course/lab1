@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 
 import sys
+import os  
+# prvo sistemskite i se ostava 2 mesta megju import od razlicen tip
 
 
 def main():
