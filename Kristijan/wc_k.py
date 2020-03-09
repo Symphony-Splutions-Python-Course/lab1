@@ -1,15 +1,13 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 
-import sys
-import os
+import sys #da postojat paketite vo namespace()
+import os  #=/=
 
 
-def main():
+def main(): #definirame funkcija (davas vlezni, ocekuvas izlezni rezutlati)
     if len(sys.argv) > 1:
         for filename in sys.argv[1:]:
             if not os.path.isfile(filename):
-                print(filename, " is not a file")
                 continue
             text_stats = stats(filename)
             if text_stats:
@@ -21,27 +19,26 @@ def main():
         print(" {}  {} {} {}".format(*text_stats))
 
 
-def content_stats(content):
-    if type(content) != str:
+def content_stats(content): #zema argument content broi
+    if type(content) != 'str':
         print("Content is not a string")
         exit(1)
+    lines = content.splitlines() #deli na redovi
+    words = content.split() #deli na zborovi
 
-    lines = content.splitlines()
-    words = content.split()
-
-    lines_count = len(lines)
-    words_count = len(words)
-    chars_count = len(content)
+    lines_count = len(lines) #broi redovi
+    words_count = len(words) #broi zborovi
+    chars_count = len(content) #broi karakteri
 
     return [lines_count, words_count, chars_count]
 
 
-def stats(filename):
+def stats(filename): #zema filename
     """This function returns three values:
     - lines in the passed string,
     - words in the passed string,
     - size of the passed string,
-    """
+    """ #komentar
 
     try:
         with open(filename, "r") as file:
@@ -52,9 +49,11 @@ def stats(filename):
     except FileNotFoundError as fnf_error:
         error = "{}: {}\n".format(fnf_error.args[1], fnf_error.filename)
         sys.stderr.write(error)
+        # exit(fnf_error.errno)
     except PermissionError as perm_error:
         error = "{}: {}\n".format(perm_error.args[1], perm_error.filename)
         sys.stderr.write(error)
+        # exit(perm_error.errno)
     except UnicodeDecodeError as error:
         error = "Binary File"
         sys.stderr.write(error)
