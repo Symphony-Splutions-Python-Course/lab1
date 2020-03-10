@@ -15,7 +15,7 @@ for el in soup.find_all(class_ = "maincounter-number"):
     corona_stats.append(int(str(el.text).replace(",", "")))
 
 dd_ratio = corona_stats[1]/(corona_stats[0]+ corona_stats[1])
-dd_ratio_str = "death to disease ratio: " + str(round(dd_ratio,2)) + "%"
+dd_ratio_str = "death to disease ratio: " + str(round(dd_ratio*100,2)) + "%"
 print(dd_ratio_str)
 f.write(dd_ratio_str + "\n")
 
