@@ -36,4 +36,4 @@ dr_ratio = statistike[1]/statistike[0]
 print("disease to recovery ratio", dr_ratio*100, "%")
 
 y=datetime.datetime.now()
-print("{}: {}, {}, {}%)".format(y, statistike[0],statistike[0],dd_ratio*100))
+print("Vreme :{} Zarazeni : {}, Mrtvi : {}, Soodnos : {}%)".format(y, statistike[0],statistike[1],dd_ratio*100))
