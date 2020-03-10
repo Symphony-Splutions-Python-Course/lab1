@@ -43,6 +43,7 @@ def stats(filename):
     - size of the passed string,
     """
 
+    
     try:
         with open(filename, "r") as file:
             content = file.read()
