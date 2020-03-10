@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import pygame
 import time
 import random
@@ -11,8 +13,8 @@ red = (213, 50, 80)
 green = (0, 255, 0)
 blue = (50, 153, 213)
  
-dis_width = 600
-dis_height = 400
+dis_width = 1000
+dis_height = 600
  
 dis = pygame.display.set_mode((dis_width, dis_height))
 pygame.display.set_caption('Snake Igra vo Python-Kristijan')
@@ -27,7 +29,7 @@ score_font = pygame.font.SysFont("comicsansms", 35)
  
  
 def Your_score(score):
-    value = score_font.render("VASIOT SCORE: " + str(score), True, white)
+    value = score_font.render("резултат: " + str(score), True, white)
     dis.blit(value, [0, 0])
  
  
@@ -82,7 +84,7 @@ def gameLoop():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LEFT or event.key == ord('a'):
                     x1_change = -snake_block
-                    y1_change = 0
+                    y1_change = 0  
                 elif event.key == pygame.K_RIGHT or event.key == ord('d'):
                     x1_change = snake_block
                     y1_change = 0
