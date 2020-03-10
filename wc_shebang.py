@@ -2,22 +2,22 @@
 
 import sys
 import os
+import re
 
 files = sys.argv[1:]
 
 def prepend_shebang(filename):
     with open(filename, "r+") as file:
         content = file.read()
-        if content.readline().__contains__ == "#!":
-            pass
+        print(file.readline())
+        if re.search('#!',content.readline()) == True :
+            pass    
         else:
-            if os.path.splitext('.py')
+            extension = os.path.splitext(file)[1]
+            if extension == '.py':
                 filename.write("#!usr/bin/env python3\n")
-            if os.path.splitext('.bash') || os.path.splitext('.sh')
+            if extension == '.sh' or extension == '.bash':
                 filename.write("#!/bin/bash\n")
-
-
-
 
 for filename in files:
     prepend_shebang(filename)
