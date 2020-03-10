@@ -11,6 +11,8 @@ response=requests.get(URL)
 status=response.status_code
 body = response.text
 content=response.content
+print(content)
+print(body)
 type(content)
 soup=BeautifulSoup(body,"html.parser")
 # numbers = soup.select("div.maincounter-number")
