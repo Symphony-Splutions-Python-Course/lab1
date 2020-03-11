@@ -3,6 +3,7 @@ import time
 import os
 from bs4 import BeautifulSoup
 import requests
+import memcache
 from datetime import datetime
 
 
@@ -51,7 +52,7 @@ def edit_content(file_name, stats, lines):
         print("Added entry for", datetime.today().date())
         lines.append(stats)
 
-    elif lines[-1] != stats:
+    elif lines[-1].strip() != stats.strip():
         print("Updated for", datetime.today().date())
         lines[-1] = stats
 
