@@ -31,10 +31,8 @@ today = date.strftime(today, "%Y-%m-%d")
 
 
 if today == firstl[0]:
-    # file.write(("{}, {} ({}%)".format(cases, dead, percent)))
-    with fileinput.FileInput("covid19.txt",inplace = True, backup = '.bak') as file:
-        for line in file:
-            print(line.replace(("{}, {} ({}%)".format(cases, dead, percent)),("{}, {} ({}%)".format(cases, dead, percent))))
+    file.seek(1,0)
+    file.write(("{}: {}, {} ({}%)".format(today, cases, dead, percent)))
 else:
     file.write(("{}: {}, {} ({}%)".format(today, cases, dead, percent)))
 
