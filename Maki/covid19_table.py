@@ -39,7 +39,7 @@ def new_file(f_name, content):
                 "Total Recovered,Active cases,Serious/Critical" \
                 ",Total Cases per 1M"
     f.write(names_csv + "\n")
-    f.write(content + "\n")
+    f.write(content)
     f.close()
     exit(1)
 
