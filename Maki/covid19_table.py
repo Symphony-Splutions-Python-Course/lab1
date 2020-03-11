@@ -5,12 +5,23 @@ from bs4 import BeautifulSoup
 import requests
 import memcache
 from datetime import datetime
+from datetime import timedelta
 
 
 def main():
     URL = "https://www.worldometers.info/coronavirus/?fbclid=IwAR1OutjUurc_K" \
           "4BH9F4smkLpC0yKfndoShfUtrs4cJZehqS7PQs0Ek85Xlw"
-    content = requests.get(URL)
+    mc = memcache.Client("127.0.0.1")
+    key_c = "content"
+    key_date = "date"
+    last_date = mc.get(key_date)
+    if last_date is None or (datetime.today()-last_date).seconds > (5 * 60):
+        content = requests.get(URL)
+        mc.set(key_c, content)
+
+    content = mc.get(key_c)
+    if content is None:
+        content = requests.get(URL)
     file_name = "stats_covid19.csv"
     today = datetime.today().date()
     soup = BeautifulSoup(content.text, "html.parser")
@@ -31,6 +42,7 @@ def main():
         exit(1)
 
     edit_content(file_name, stats_csv, lines)
+    mc.set(key_date, datetime.today())
 
 
 def new_file(f_name, content):
