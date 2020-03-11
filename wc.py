@@ -60,6 +60,8 @@ def stats(filename):
         error = "Binary File"
         sys.stderr.write(error)
 
+     import ipdb; ipdb.set_trace()
+
 
 if __name__ == "__main__":
     main()
