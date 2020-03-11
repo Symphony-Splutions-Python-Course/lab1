@@ -11,17 +11,17 @@ def main():
           "4BH9F4smkLpC0yKfndoShfUtrs4cJZehqS7PQs0Ek85Xlw"
     content = requests.get(URL)
     file_name = "stats_covid19.csv"
-
+    today = datetime.today().date()
     soup = BeautifulSoup(content.text, "html.parser")
     table_stats = str(soup.findAll('tr')[-1].text).replace(",", "").split()
-    table_stats[0] = str(datetime.today().date())
+    table_stats[0] = str(today)
 
     stats_csv = str.join(",", table_stats)
 
     if not os.path.exists(file_name):
-        new_file(file_name)
+        new_file(file_name, stats_csv)
 
-    f = open("stats_covid19.csv", "r")
+    f = open(file_name, "r")
     lines = f.readlines()
     f.close()
 
@@ -33,7 +33,7 @@ def main():
 
 
 def new_file(f_name, content):
-    f = open("stats_covid19.csv", "w")
+    f = open(f_name, "w")
     print("Created new file")
     names_csv = "Date,Total Cases,New Cases,Total Deaths,New Deaths," \
                 "Total Recovered,Active cases,Serious/Critical" \
