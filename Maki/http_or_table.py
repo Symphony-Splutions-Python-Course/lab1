@@ -26,11 +26,11 @@ key_date = "last_datetime_key"
 cache = memcache.Client(server_IP)
 
 last_hour = cache.get(key_date)
-if last_hour is None:
-    set_date_to_cache()
 
 
 def main():
+    if last_hour is None:
+        set_date_to_cache()
 
     if len(sys.argv) > 1 and sys.argv[1] == '--https':
         run(HTTPServer, BaseHTTPRequestHandler)
