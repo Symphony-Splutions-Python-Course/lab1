@@ -1,0 +1,6 @@
+Coronavirus statistics exactly on: 2020-03-11 15:26:57.986658
+
+death to disease ratio: 3.48%
+disease to recovery ratio: 35.49%
+diseased at the moment: 121656
+total recorded cases: 192981
