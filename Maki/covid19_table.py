@@ -78,7 +78,7 @@ def new_file(content):
     write_to_file(content, names_csv)
 
     print("Created new file")
-    set_date_to_mc()
+    set_date_to_cache()
     exit(1)
 
 
@@ -92,10 +92,10 @@ def edit_content(stats, lines):
         lines[-1] = stats + '\n'
 
     write_to_file(lines)
-    set_date_to_mc()
+    set_date_to_cache()
 
 
-def set_date_to_mc():
+def set_date_to_cache():
     cache.set(key_date, datetime.today())
 
 
