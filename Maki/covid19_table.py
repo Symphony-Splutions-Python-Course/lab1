@@ -1,74 +1,108 @@
-import os
-import sys
-import time
-from datetime import datetime, timedelta
-
-import memcache
-import requests
+from os import path
 from bs4 import BeautifulSoup
+import requests
+import memcache
+from datetime import date
+
+today = date.today()
+
+URL = "https://www.worldometers.info/coronavirus/?fbclid=IwAR1OutjUurc_K" \
+      "4BH9F4smkLpC0yKfndoShfUtrs4cJZehqS7PQs0Ek85Xlw"
+
+server_IP = "127.0.0.1"
+
+file_name = "stats_covid19.csv"
+
+key_c = "content"
+key_date = "last_date"
+
+mc = memcache.Client(server_IP)
 
 
 def main():
-    URL = "https://www.worldometers.info/coronavirus/?fbclid=IwAR1OutjUurc_K" \
-          "4BH9F4smkLpC0yKfndoShfUtrs4cJZehqS7PQs0Ek85Xlw"
-    mc = memcache.Client("127.0.0.1")
-    key_c = "content"
-    key_date = "date"
+    content = get_content()
+
+    stats_csv = scrape_stats(content)
+
+    if not path.exists(file_name):
+        new_file(stats_csv)
+
+    # If the file was just created the program finishes here=======================
+
+    lines = get_lines_from_file()
+
+    if len(lines) == 0:
+        new_file(stats_csv)
+
+    edit_content(stats_csv, lines)
+
+    mc.set(key_date, today)
+
+
+def get_lines_from_file():
+    f = open(file_name, "r")
+    lines = f.readlines()
+    f.close()
+    return lines
+
+
+def get_content():
     last_date = mc.get(key_date)
-    if last_date is None or (datetime.today()-last_date).seconds > (5 * 60):
+
+    if last_date is None or (date.today() - last_date).seconds > (5 * 60):
         content = requests.get(URL)
         mc.set(key_c, content)
 
     content = mc.get(key_c)
+
     if content is None:
         content = requests.get(URL)
-    file_name = "stats_covid19.csv"
-    today = datetime.today().date()
+
+    return content
+
+
+def scrape_stats(content):
     soup = BeautifulSoup(content.text, "html.parser")
     table_stats = str(soup.findAll('tr')[-1].text).replace(",", "").split()
     table_stats[0] = str(today)
-
     stats_csv = str.join(",", table_stats)
-
-    if not os.path.exists(file_name):
-        new_file(file_name, stats_csv)
-
-    f = open(file_name, "r")
-    lines = f.readlines()
-    f.close()
-
-    if len(lines) == 0:
-        new_file(file_name, stats_csv)
-        exit(1)
-
-    edit_content(file_name, stats_csv, lines)
-    mc.set(key_date, datetime.today())
+    return stats_csv
 
 
-def new_file(f_name, content):
-    f = open(f_name, "w")
-    print("Created new file")
+def new_file(content):
     names_csv = "Date,Total Cases,New Cases,Total Deaths,New Deaths," \
                 "Total Recovered,Active cases,Serious/Critical" \
                 ",Total Cases per 1M"
-    f.write(names_csv + "\n")
-    f.write(content + "\n")
-    f.close()
+
+    write_to_file(content, names_csv)
+
+    print("Created new file")
+    mc.set(key_date, today)
     exit(1)
 
 
-def edit_content(file_name, stats, lines):
-    f = open(file_name, "w")
+def edit_content(stats, lines):
 
-    if str(datetime.today().date()) not in lines[-1]:
-        print("Added entry for", datetime.today().date())
-        lines.append(stats)
+    if str(today) not in lines[-1]:
+        print("Added entry for", today)
+        lines.append(stats + '\n')
 
     elif lines[-1].strip() != stats.strip():
-        print("Updated for", datetime.today().date())
-        lines[-1] = stats
+        print("Updated for", today)
+        lines[-1] = stats + '\n'
 
-    f.write(str.join("", lines))
+    write_to_file(lines)
+
+
+def write_to_file(content, names = None):
+    f = open(file_name, "w")
+
+    if names is not None:
+        f.write(names + "\n")
+        f.write(content + "\n")
+
+    f.write(str.join("", content))
+
     f.close()
 
 
