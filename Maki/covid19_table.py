@@ -48,7 +48,7 @@ def get_lines_from_file():
 
 
 def get_content():
-    last_date = cache .get(key_date)
+    last_date = cache.get(key_date)
 
     if last_date is None or (datetime.today() - last_date).seconds > (5 * 60):
         content = requests.get(URL)
@@ -78,12 +78,11 @@ def new_file(content):
     write_to_file(content, names_csv)
 
     print("Created new file")
-    set_date_to_cache()
+    set_date_to_mc()
     exit(1)
 
 
 def edit_content(stats, lines):
-
     if str(today) not in lines[-1]:
         print("Added entry for", today)
         lines.append(stats + '\n')
@@ -93,15 +92,14 @@ def edit_content(stats, lines):
         lines[-1] = stats + '\n'
 
     write_to_file(lines)
-    set_date_to_cache()
+    set_date_to_mc()
 
 
-
-def set_date_to_cache():
+def set_date_to_mc():
     cache.set(key_date, datetime.today())
 
 
-def write_to_file(content, names = None):
+def write_to_file(content, names=None):
     f = open(file_name, "w")
 
     if names is not None:
