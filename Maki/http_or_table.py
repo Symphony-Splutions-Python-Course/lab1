@@ -7,7 +7,6 @@ from datetime import date
 import sys
 from http.server import HTTPServer, BaseHTTPRequestHandler
 
-last_hour = datetime.today()
 
 names_csv = "Date,Total Cases,New Cases,Total Deaths,New Deaths," \
             "Total Recovered,Active cases,Serious/Critical" \
@@ -27,6 +26,7 @@ key_date = "last_datetime"
 
 cache = memcache.Client(server_IP)
 
+last_hour = cache.get(key_date)
 
 def main():
     if len(sys.argv) > 1 and sys.argv[1] == '--https':
@@ -61,7 +61,6 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
     def do_GET(self):
         self.send_response(200)
         self.end_headers()
-        set_date_to_cache()
         update_table()
         self.wfile.write(str_to_bin(scrape_stats(get_content())))
 
@@ -88,11 +87,12 @@ def get_lines_from_file():
 
 def get_content():
     last_date = cache.get(key_date)
-
+    print((datetime.today() - last_date).seconds)
     if last_date is None or (datetime.today() - last_date).seconds > (5 * 60):
         print("Content updated. 5 minutes have passed since last cache")
         content = requests.get(URL)
-        cache.set(key_c, content)
+        set_date_to_cache()
+        cache.set(key_date, datetime.today())
 
     content = cache.get(key_c)
 
@@ -115,7 +115,6 @@ def new_file(content, is_request):
 
     print("Created new file: {}".format(format_date(cache.get(key_date))))
     print(content)
-    set_date_to_cache()
     if not is_request:
         exit(1)
 
@@ -133,7 +132,6 @@ def edit_content(stats, lines):
         print("File is up to date:")
         print('[', stats, ']', sep='')
     write_to_file(lines)
-    set_date_to_cache()
 
 
 def set_date_to_cache():
