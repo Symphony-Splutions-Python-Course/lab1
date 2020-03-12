@@ -21,14 +21,17 @@ port = 2021
 file_name = "stats_covid19.csv"
 
 key_c = "content"
-key_date = "last_datetime"
+key_date = "last_datetime_key"
 
 cache = memcache.Client(server_IP)
 
 last_hour = cache.get(key_date)
+if last_hour is None:
+    set_date_to_cache()
 
 
 def main():
+
     if len(sys.argv) > 1 and sys.argv[1] == '--https':
         run(HTTPServer, BaseHTTPRequestHandler)
     # if --https is sent as argument the program stops here
@@ -136,7 +139,8 @@ def edit_content(stats, lines):
 
 
 def set_date_to_cache():
-    cache.set(key_date, datetime.today())
+    last_hour = datetime.today()
+    cache.set(key_date, last_hour)
 
 
 def set_content_to_cache(content):
