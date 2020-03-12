@@ -1,11 +1,8 @@
-import sys
-import time
-import os
+from os import path
 from bs4 import BeautifulSoup
 import requests
 import memcache
 from datetime import datetime
-from datetime import timedelta
 
 
 def main():
@@ -30,7 +27,7 @@ def main():
 
     stats_csv = str.join(",", table_stats)
 
-    if not os.path.exists(file_name):
+    if not path.exists(file_name):
         new_file(file_name, stats_csv)
 
     f = open(file_name, "r")
@@ -39,7 +36,6 @@ def main():
 
     if len(lines) == 0:
         new_file(file_name, stats_csv)
-        exit(1)
 
     edit_content(file_name, stats_csv, lines)
     mc.set(key_date, datetime.today())
@@ -62,11 +58,11 @@ def edit_content(file_name, stats, lines):
 
     if str(datetime.today().date()) not in lines[-1]:
         print("Added entry for", datetime.today().date())
-        lines.append(stats)
+        lines.append(stats+'\n')
 
     elif lines[-1].strip() != stats.strip():
         print("Updated for", datetime.today().date())
-        lines[-1] = stats
+        lines[-1] = stats + '\n'
 
     f.write(str.join("", lines))
     f.close()
