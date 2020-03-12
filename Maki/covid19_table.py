@@ -1,11 +1,11 @@
+import os
 import sys
 import time
-import os
-from bs4 import BeautifulSoup
-import requests
+from datetime import datetime, timedelta
+
 import memcache
-from datetime import datetime
-from datetime import timedelta
+import requests
+from bs4 import BeautifulSoup
 
 
 def main():
