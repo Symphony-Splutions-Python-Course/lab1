@@ -16,7 +16,7 @@ file_name = "stats_covid19.csv"
 key_c = "content"
 key_date = "last_date"
 
-mc = memcache.Client(server_IP)
+cache = memcache.Client(server_IP)
 
 
 def main():
@@ -36,7 +36,7 @@ def main():
 
     edit_content(stats_csv, lines)
 
-    mc.set(key_date, today)
+    cache.set(key_date, today)
 
 
 def get_lines_from_file():
@@ -47,13 +47,13 @@ def get_lines_from_file():
 
 
 def get_content():
-    last_date = mc.get(key_date)
+    last_date = cache.get(key_date)
 
     if last_date is None or (date.today() - last_date).seconds > (5 * 60):
         content = requests.get(URL)
-        mc.set(key_c, content)
+        cache.set(key_c, content)
 
-    content = mc.get(key_c)
+    content = cache.get(key_c)
 
     if content is None:
         content = requests.get(URL)
@@ -77,7 +77,7 @@ def new_file(content):
     write_to_file(content, names_csv)
 
     print("Created new file")
-    mc.set(key_date, today)
+    cache.set(key_date, today)
     exit(1)
 
 
