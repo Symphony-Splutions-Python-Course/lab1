@@ -2,6 +2,7 @@ from os import path
 from bs4 import BeautifulSoup
 import requests
 import memcache
+from datetime import datetime
 from datetime import date
 
 today = date.today()
@@ -14,9 +15,9 @@ server_IP = "127.0.0.1"
 file_name = "stats_covid19.csv"
 
 key_c = "content"
-key_date = "last_date"
+key_date = "last_datetime"
 
-mc = memcache.Client(server_IP)
+cache = memcache.Client(server_IP)
 
 
 def main():
@@ -34,9 +35,9 @@ def main():
     if len(lines) == 0:
         new_file(stats_csv)
 
-    edit_content(stats_csv, lines)
+    # If the file was just created the program finishes here=======================
 
-    mc.set(key_date, today)
+    edit_content(stats_csv, lines)
 
 
 def get_lines_from_file():
@@ -47,13 +48,13 @@ def get_lines_from_file():
 
 
 def get_content():
-    last_date = mc.get(key_date)
+    last_date = cache.get(key_date)
 
-    if last_date is None or (date.today() - last_date).seconds > (5 * 60):
+    if last_date is None or (datetime.today() - last_date).seconds > (5 * 60):
         content = requests.get(URL)
-        mc.set(key_c, content)
+        cache.set(key_c, content)
 
-    content = mc.get(key_c)
+    content = cache.get(key_c)
 
     if content is None:
         content = requests.get(URL)
@@ -77,12 +78,11 @@ def new_file(content):
     write_to_file(content, names_csv)
 
     print("Created new file")
-    mc.set(key_date, today)
+    set_date_to_cache()
     exit(1)
 
 
 def edit_content(stats, lines):
-
     if str(today) not in lines[-1]:
         print("Added entry for", today)
         lines.append(stats + '\n')
@@ -92,16 +92,22 @@ def edit_content(stats, lines):
         lines[-1] = stats + '\n'
 
     write_to_file(lines)
+    set_date_to_cache()
 
 
-def write_to_file(content, names = None):
+def set_date_to_cache():
+    cache.set(key_date, datetime.today())
+
+
+def write_to_file(content, names=None):
     f = open(file_name, "w")
 
     if names is not None:
         f.write(names + "\n")
         f.write(content + "\n")
 
-    f.write(str.join("", content))
+    else:
+        f.write(str.join("", content))
 
     f.close()
 
