@@ -3,7 +3,6 @@ from bs4 import BeautifulSoup
 import requests
 import memcache
 from datetime import datetime
-from datetime import date
 import sys
 from http.server import HTTPServer, BaseHTTPRequestHandler
 
@@ -27,6 +26,7 @@ key_date = "last_datetime"
 cache = memcache.Client(server_IP)
 
 last_hour = cache.get(key_date)
+
 
 def main():
     if len(sys.argv) > 1 and sys.argv[1] == '--https':
@@ -87,12 +87,12 @@ def get_lines_from_file():
 
 def get_content():
     last_date = cache.get(key_date)
-    print((datetime.today() - last_date).seconds)
-    if last_date is None or (datetime.today() - last_date).seconds > (5 * 60):
+    print("Seconds passed since last update: " + str((datetime.today() - last_date).seconds) + "s")
+    if last_date is None or is_cache_outdated(last_date):
         print("Content updated. 5 minutes have passed since last cache")
         content = requests.get(URL)
         set_date_to_cache()
-        cache.set(key_date, datetime.today())
+        set_content_to_cache(content)
 
     content = cache.get(key_c)
 
@@ -131,11 +131,16 @@ def edit_content(stats, lines):
     else:
         print("File is up to date:")
         print('[', stats, ']', sep='')
+
     write_to_file(lines)
 
 
 def set_date_to_cache():
     cache.set(key_date, datetime.today())
+
+
+def set_content_to_cache(content):
+    cache.set(key_c, content)
 
 
 def write_to_file(content, names=None):
@@ -157,6 +162,13 @@ def format_date(date):
 
 def is_up_to_date(date_h, line):
     return format_date(date_h) in line
+
+
+def is_cache_outdated(last_date):
+    if (datetime.today() - last_date).seconds > (5 * 60):
+        return True
+    lines = get_lines_from_file()
+    return format_date(last_date) not in lines[-1]
 
 
 if __name__ == "__main__":
