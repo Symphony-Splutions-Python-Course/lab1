@@ -5,6 +5,7 @@ import memcache
 from datetime import datetime
 from datetime import date
 
+
 today = date.today()
 
 URL = "https://www.worldometers.info/coronavirus/?fbclid=IwAR1OutjUurc_K" \
@@ -21,6 +22,7 @@ cache = memcache.Client(server_IP)
 
 
 def main():
+
     content = get_content()
 
     stats_csv = scrape_stats(content)
