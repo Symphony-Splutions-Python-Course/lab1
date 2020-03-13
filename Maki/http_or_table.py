@@ -26,12 +26,13 @@ key_date = "last_datetime_key"
 
 cache = memcache.Client(server_IP)
 
-last_hour = cache.get(key_date)
+last_date = cache.get(key_date)
 
 
 def main():
-    if last_hour is None:
-        set_date_to_cache()
+    global last_date
+    if last_date is None:
+        last_date = set_date_to_cache()
 
     if len(sys.argv) > 1 and sys.argv[1] == '--https':
         run(HTTPServer, BaseHTTPRequestHandler)
@@ -109,7 +110,7 @@ def get_content():
 def scrape_stats(content):
     soup = BeautifulSoup(content.text, "html.parser")
     table_stats = str(soup.findAll('tr')[-1].text).replace(",", "").split()
-    table_stats[0] = str(format_date(last_hour) + "h")
+    table_stats[0] = str(format_date(last_date) + "h")
     stats_csv = str.join(",", table_stats)
     return stats_csv
 
@@ -124,12 +125,12 @@ def new_file(content, is_request):
 
 
 def edit_content(stats, lines):
-    if not is_up_to_date(last_hour, lines[-1]):
-        print("Added entry for {}".format(format_date(last_hour)))
+    if not is_up_to_date(last_date, lines[-1]):
+        print("Added entry for {}".format(format_date(last_date)))
         lines.append(stats + '\n')
 
     elif lines[-1].strip() != stats.strip():
-        print("Updated for {}h".format(format_date(last_hour)))
+        print("Updated for {}h".format(format_date(last_date)))
         lines[-1] = stats + '\n'
 
     else:
@@ -140,13 +141,8 @@ def edit_content(stats, lines):
 
 
 def set_date_to_cache():
-<<<<<<< HEAD
     cache.set(key_date, datetime.today())
     return cache.get(key_date)
-=======
-    last_hour = datetime.today()
-    cache.set(key_date, last_hour)
->>>>>>> 3a2dbe3053898d49919f6dcb7a490cc7fc5fee55
 
 
 def set_content_to_cache(content):
