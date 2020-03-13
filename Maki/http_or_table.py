@@ -5,6 +5,7 @@ import memcache
 from datetime import datetime
 import sys
 from http.server import HTTPServer, BaseHTTPRequestHandler
+import json
 
 
 names_csv = "Date,Total Cases,New Cases,Total Deaths,New Deaths," \
@@ -25,12 +26,13 @@ key_date = "last_datetime_key"
 
 cache = memcache.Client(server_IP)
 
-last_hour = cache.get(key_date)
+last_date = cache.get(key_date)
 
 
 def main():
-    if last_hour is None:
-        set_date_to_cache()
+    global last_date
+    if last_date is None:
+        last_date = set_date_to_cache()
 
     if len(sys.argv) > 1 and sys.argv[1] == '--https':
         run(HTTPServer, BaseHTTPRequestHandler)
@@ -90,13 +92,13 @@ def get_lines_from_file():
 
 def get_content():
     last_date = cache.get(key_date)
-    print("Seconds passed since last update: " + str((datetime.today() - last_date).seconds) + "s")
     if last_date is None or is_cache_outdated(last_date):
         print("Content updated. 5 minutes have passed since last cache")
         content = requests.get(URL)
-        set_date_to_cache()
+        last_date = set_date_to_cache()
         set_content_to_cache(content)
 
+    print("Seconds passed since last update: " + str((datetime.today() - last_date).seconds) + "s")
     content = cache.get(key_c)
 
     if content is None:
@@ -108,7 +110,7 @@ def get_content():
 def scrape_stats(content):
     soup = BeautifulSoup(content.text, "html.parser")
     table_stats = str(soup.findAll('tr')[-1].text).replace(",", "").split()
-    table_stats[0] = str(format_date(last_hour) + "h")
+    table_stats[0] = str(format_date(last_date) + "h")
     stats_csv = str.join(",", table_stats)
     return stats_csv
 
@@ -123,12 +125,12 @@ def new_file(content, is_request):
 
 
 def edit_content(stats, lines):
-    if not is_up_to_date(last_hour, lines[-1]):
-        print("Added entry for {}".format(format_date(last_hour)))
+    if not is_up_to_date(last_date, lines[-1]):
+        print("Added entry for {}".format(format_date(last_date)))
         lines.append(stats + '\n')
 
     elif lines[-1].strip() != stats.strip():
-        print("Updated for {}h".format(format_date(last_hour)))
+        print("Updated for {}h".format(format_date(last_date)))
         lines[-1] = stats + '\n'
 
     else:
@@ -139,12 +141,16 @@ def edit_content(stats, lines):
 
 
 def set_date_to_cache():
-    last_hour = datetime.today()
-    cache.set(key_date, last_hour)
+    cache.set(key_date, datetime.today())
+    return cache.get(key_date)
 
 
 def set_content_to_cache(content):
     cache.set(key_c, content)
+
+
+def format_to_json(data):
+    return json.encoder(data)
 
 
 def write_to_file(content, names=None):
