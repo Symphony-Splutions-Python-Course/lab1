@@ -5,6 +5,7 @@ import memcache
 from datetime import datetime
 import sys
 from http.server import HTTPServer, BaseHTTPRequestHandler
+import json
 
 
 names_csv = "Date,Total Cases,New Cases,Total Deaths,New Deaths," \
@@ -87,13 +88,13 @@ def get_lines_from_file():
 
 def get_content():
     last_date = cache.get(key_date)
-    print("Seconds passed since last update: " + str((datetime.today() - last_date).seconds) + "s")
     if last_date is None or is_cache_outdated(last_date):
         print("Content updated. 5 minutes have passed since last cache")
         content = requests.get(URL)
-        set_date_to_cache()
+        last_date = set_date_to_cache()
         set_content_to_cache(content)
 
+    print("Seconds passed since last update: " + str((datetime.today() - last_date).seconds) + "s")
     content = cache.get(key_c)
 
     if content is None:
@@ -137,10 +138,15 @@ def edit_content(stats, lines):
 
 def set_date_to_cache():
     cache.set(key_date, datetime.today())
+    return cache.get(key_date)
 
 
 def set_content_to_cache(content):
     cache.set(key_c, content)
+
+
+def format_to_json(data):
+    return json.encoder(data)
 
 
 def write_to_file(content, names=None):
