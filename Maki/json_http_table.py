@@ -71,6 +71,7 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
         self.send_response(200)
 
         self.send_header('last-modified', last_date)
+        self.send_header('content-type', "application/json")
         self.end_headers()
 
         update_table()
