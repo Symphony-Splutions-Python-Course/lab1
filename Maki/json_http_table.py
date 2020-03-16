@@ -7,10 +7,52 @@ import sys
 from http.server import HTTPServer, BaseHTTPRequestHandler
 import json
 from dateutil.parser import parse as parsedate
+import sqlite
+
+_db = None
+DB_FILE = "covid19.db"
+TABLE_NAME = "covid19"
+
+def db_connection(db_file=DB_FILE):
+    if not _db:
+        _db = sqlite.connect(DB_FILE)
+    return _db
+
+
+def insert_row(values):
+    db = db_connection()
+    cursor = db.cursor()
+    cursor.execute("INSER INTO {} VALUES {}".format(TABLE_NAME, values))
+    db.commit()
+
+
+def read_row():
+    """ This should return a list of the values for a row"""
+    db = db_connection()
+    cursor = db.cursor()
+    result = cursor.execute("SELECT * FROM {}".format(TABLE_NAME)
+    return result
+
 
 names_csv = "Date,Total Cases,New Cases,Total Deaths,New Deaths," \
             "Total Recovered,Active cases,Serious/Critical" \
             ",Total Cases per 1M"
+
+c.execute('''CREATE TABLE covid19
+             (date text, 
+              country text,
+              total_cases real, 
+              new_cases real, 
+              togal_deaths real, 
+              new_deaths real)''')
+
+c.execute('''INSERT INTO covid19
+             VALUES('2020-03-16T11:41:42.567789',
+             12341234,
+             1234,
+             12341234,
+             1234)''')
+
 
 URL = "https://www.worldometers.info/coronavirus/?fbclid=IwAR1OutjUurc_K" \
       "4BH9F4smkLpC0yKfndoShfUtrs4cJZehqS7PQs0Ek85Xlw"
