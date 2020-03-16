@@ -30,7 +30,7 @@ def read_row():
     """ This should return a list of the values for a row"""
     db = db_connection()
     cursor = db.cursor()
-    result = cursor.execute("SELECT * FROM {}".format(TABLE_NAME)
+    result = cursor.execute("SELECT * FROM {}".format(TABLE_NAME))
     return result
 
 
