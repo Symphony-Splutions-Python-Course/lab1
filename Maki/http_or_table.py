@@ -124,6 +124,7 @@ def new_file(content, is_request):
 
 
 def edit_content(stats, lines):
+
     if not is_up_to_date(last_date, lines[-1]):
         print("Added entry for {}".format(format_date(last_date)))
         lines.append(stats + '\n')
