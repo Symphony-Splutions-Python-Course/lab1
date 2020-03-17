@@ -1,0 +1,2 @@
+class PersistanceAgent(object):
+    pass
