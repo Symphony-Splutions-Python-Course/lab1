@@ -7,7 +7,7 @@ import sys
 from http.server import HTTPServer, BaseHTTPRequestHandler
 import json
 from dateutil.parser import parse as parsedate
-import sqlite
+import sqlite3
 
 _db = None
 DB_FILE = "covid19.db"
@@ -15,43 +15,50 @@ TABLE_NAME = "covid19"
 
 def db_connection(db_file=DB_FILE):
     if not _db:
-        _db = sqlite.connect(DB_FILE)
+        _db = sqlite3.connect(DB_FILE)
     return _db
 
 
-def insert_row(values):
+def insert_row(TABLE_NAME,values):
     db = db_connection()
     cursor = db.cursor()
-    cursor.execute("INSER INTO {} VALUES {}".format(TABLE_NAME, values))
-    db.commit()
-
-
-def read_row():
-    """ This should return a list of the values for a row"""
-    db = db_connection()
-    cursor = db.cursor()
-    result = cursor.execute("SELECT * FROM {}".format(TABLE_NAME))
-    return result
-
-
-names_csv = "Date,Total Cases,New Cases,Total Deaths,New Deaths," \
-            "Total Recovered,Active cases,Serious/Critical" \
-            ",Total Cases per 1M"
-
-c.execute('''CREATE TABLE covid19
+    cursor.execute('''CREATE TABLE covid19
              (date text, 
               country text,
               total_cases real, 
               new_cases real, 
               togal_deaths real, 
               new_deaths real)''')
+    cursor.execute("INSER INTO {} VALUES {}".format(TABLE_NAME, values))
+    db.commit()
 
-c.execute('''INSERT INTO covid19
-             VALUES('2020-03-16T11:41:42.567789',
-             12341234,
-             1234,
-             12341234,
-             1234)''')
+
+def read_row(TABLE_NAME):
+    """ This should return a list of the values for a row"""
+    db = db_connection()
+    cursor = db.cursor()
+    result = cursor.execute("SELECT * FROM {}".format(TABLE_NAME))
+    return result
+ 
+
+names_csv = "Date,Total Cases,New Cases,Total Deaths,New Deaths," \
+            "Total Recovered,Active cases,Serious/Critical" \
+            ",Total Cases per 1M"
+
+# cursor.execute('''CREATE TABLE covid19
+#              (date text, 
+#               country text,
+#               total_cases real, 
+#               new_cases real, 
+#               togal_deaths real, 
+#               new_deaths real)''')
+
+# cursor.execute('''INSERT INTO covid19
+#              VALUES('2020-03-16T11:41:42.567789',
+#              12341234,
+#              1234,
+#              12341234,
+#              1234)''')
 
 
 URL = "https://www.worldometers.info/coronavirus/?fbclid=IwAR1OutjUurc_K" \
@@ -67,25 +74,46 @@ key_c = "content"
 key_date = "last_datetime_key"
 key_header = 'key_header'
 
+
 cache = memcache.Client(server_IP)
-
 last_date = cache.get(key_date)
-
+  
 
 def main():
     global last_date
     if last_date is None:
         last_date = set_date_to_cache()
 
-    # TESTcache.get(key_header)
-    run(HTTPServer, BaseHTTPRequestHandler)
+    # # TESTcache.get(key_header)
+    # run(HTTPServer, BaseHTTPRequestHandler)
 
     if len(sys.argv) > 1 and sys.argv[1] == '--https':
         run(HTTPServer, BaseHTTPRequestHandler)
     # if --https is sent as argument the program stops here
+        update_table()
+    elif len(sys.argv) > 1 and sys.argv[1] == '--db':
+        update_tableSql()
 
-    update_table()
+def update_tableSql(is_request=False):
+    content = read_row(TABLE_NAME)
+    stats_table= stats_render(content)
+    if not path.exists(file_name):
+        new_file(stats_table, is_request)
+    lines = get_lines_from_file()
 
+    if len(lines) == 0:
+        new_file(stats_table, is_request)
+
+    # If the file was just created the program finishes here=======================
+
+    edit_content(stats_table, lines)
+
+def stats_render(content):
+    soup = BeautifulSoup(content.text, "html.parser")
+    table_stats = str(soup.findAll('tr')[-1].text).replace(",", "").split()
+    table_stats[0] = str(format_date(last_date) + "h")
+    stats_table = str.join(",", table_stats)
+    return stats_table
 
 def update_table(is_request=False):
     content = get_content()
@@ -105,6 +133,19 @@ def update_table(is_request=False):
     # If the file was just created the program finishes here=======================
 
     edit_content(stats_csv, lines)
+
+def write_to_file2(content, names=None):
+
+    f = open(DB_FILE, "w")
+
+    if names is not None:
+        insert_row(TABLE_NAME,content)
+        read_row(TABLE_NAME)
+
+    else:
+        f.write(str.join("", content))
+
+    f.close()
 
 
 class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
@@ -126,7 +167,6 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
 def run(server_class, handler_class):
     httpd = HTTPServer((my_server_IP, port), SimpleHTTPRequestHandler)
     httpd.serve_forever()
-
 
 def align_left(string):
     return str.join("", [str.ljust(s, 18) + "|" for s in string.split(',')])
