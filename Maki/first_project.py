@@ -29,7 +29,7 @@ def update():
 
 
 def run():
-    from .Maki.utils.http_handler import SimpleHTTPRequestHandler
+    from utils.http_handler import SimpleHTTPRequestHandler
     httpd = HTTPServer((PUBLIC_SERVER_IP, PORT_NUMBER), SimpleHTTPRequestHandler)
     httpd.serve_forever()
 
