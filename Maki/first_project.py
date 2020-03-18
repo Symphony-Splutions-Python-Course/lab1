@@ -11,9 +11,6 @@ my_db = Database(DATABASE_NAME)
 
 
 def main():
-    if get_last_date() is None:
-        set_date_to_cache()
-
     if len(sys.argv) > 1:
         if sys.argv[1] == '--https':
             run()

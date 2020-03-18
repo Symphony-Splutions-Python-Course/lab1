@@ -15,7 +15,9 @@ def diff_in_seconds(date1=get_last_date(), date2=datetime.now()):
 
 
 def format_minutes(date):
-    return date.strftime("%b %d %Y %H:%m")
+    str1 = date.strftime("%b %d %Y %H:")
+    minutes = str((int(date.strftime("%M"))//5) * 5)
+    return str1 + minutes
 
 
 def is_outdated(date=get_last_date(), date2=datetime.now()):

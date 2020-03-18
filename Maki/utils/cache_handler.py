@@ -20,8 +20,6 @@ def set_table_to_cache(content, table_name):
 
 def get_last_date():
     ret = CACHE.get(DATE_KEY)
-    # if ret is None:
-    #     return datetime.now().replace(year=2019)
     return ret
 
 

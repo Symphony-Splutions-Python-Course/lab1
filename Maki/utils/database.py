@@ -37,8 +37,12 @@ class Database:
 
     def add_row(self, values, table_name):
         table_name = table_name.strip()
-        self.execute("INSERT INTO " + table_name + " VALUES(" + values + ")")
-        self.commit()
+        try:
+            self.execute("INSERT INTO " + table_name + " VALUES(" + values + ")")
+            self.commit()
+        except sql.IntegrityError:
+            print("Unique constraint violated")
+
 
     def create_table_input(self):
         table_name = input("Enter table name: ")
@@ -119,7 +123,6 @@ class Database:
         if is_outdated():
             for row in rows:
                 self.add_row(row, table_name)
-        self.print_table(table_name)
 
 
 if __name__ == "__main__":
