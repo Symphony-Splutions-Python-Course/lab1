@@ -39,7 +39,7 @@ def new_file(content, is_request):
 
 
 def edit_content(stats, lines):
-    if not is_outdated(get_last_date(), lines[-1]):
+    if format_date(get_last_date()) not in lines[-1]:
         print("Added entry for {}".format(format_date(get_last_date())))
         lines.append(stats + '\n')
 

@@ -10,9 +10,8 @@ def set_date_to_cache():
     CACHE.set(DATE_KEY, datetime.now())
 
 
-def set_stats_to_cache(content, stats_db):
+def set_stats_to_cache(content):
     CACHE.set(STATS_KEY, content)
-    CACHE.set(STATS_DB_KEY, stats_db)
 
 
 def set_table_to_cache(content, table_name):

@@ -7,7 +7,6 @@ from lab1.Maki.utils.constants import *
 from lab1.Maki.utils.date_handler import *
 from lab1.Maki.utils.cache_handler import *
 
-content = requests.get(URL)
 
 
 def main():
@@ -32,6 +31,7 @@ def format_table_row(row):
 
 def get_table():
     """returns a list of lists of all the table entries"""
+    content = get_content()
     soup = BeautifulSoup(content.text, "html.parser")
     names = "Country_Other,TotalCase,NewCases,TotalDeaths,NewDeaths,TotalRecovered" \
             ",ActiveCase,Serious_Critical,Tot_Cases_per_1M pop"
@@ -43,7 +43,7 @@ def get_table():
             row_entry = entry.text.strip().replace("+", "").replace(",", "").replace(" ", "_")
             if len(row_entry) == 0:
                 row_entry = "0"  # TODO: NULL type for sql
-            if not row_entry.replace('.','',1).isdigit(): # check if it is not a number
+            if not row_entry.replace('.', '', 1).isdigit():  # check if it is not a number
                 row_entry = ("\"" + row_entry + "\"")
             row_stats.append(row_entry)
         if row_stats == [] or row_stats[0] == "Total:":
@@ -54,30 +54,18 @@ def get_table():
 
 
 def get_content():
-    last_date = get_last_date()
-    
-    if last_date is None or is_outdated(last_date):
-        print("Content updated. 5 minutes have passed since last cache")
-        last_date = set_date_to_cache()
-        set_stats_to_cache(get_stats())
-
-    print("Seconds passed since last update: " + str(diff_in_seconds()) + "s")
-    content_html = CACHE.get(STATS_KEY)
-
-    if content_html is None:
-        content_html = requests.get(URL)
-
-    return content_html
+    return requests.get(URL)
 
 
 def get_stats():
-    content = get_content()
-    soup = BeautifulSoup(content.text, "html.parser")
-    table_stats = str(soup.findAll('tr')[-1].text).replace(",", "").split()
-    table_stats[0] = str(format_date(get_last_date()) + "h")
-    stats_csv = str.join(",", table_stats)
-    return stats_csv
-
+    if get_stats_from_cache() is None or is_outdated():
+        content = get_content()
+        soup = BeautifulSoup(content.text, "html.parser")
+        table_stats = str(soup.findAll('tr')[-1].text).replace(",", "").split()
+        table_stats[0] = str(format_date(get_last_date()) + "h")
+        stats_csv = str.join(",", table_stats)
+        set_stats_to_cache(stats_csv)
+    return get_stats_from_cache()
 
 
 if __name__ == '__main__':
