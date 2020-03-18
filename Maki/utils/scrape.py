@@ -8,7 +8,6 @@ from utils.date_handler import *
 from utils.cache_handler import *
 
 
-
 def main():
     get_table()
 
@@ -24,7 +23,7 @@ def format_table_row(row):
     for i in range(3, 10):
         group = groups.group(i)
         if pattern_space.match(group):
-            group = None  # TODO: None in SQL???
+            group = """"NULL"""
         table_row.append(group)
     return str.join(",", table_row)
 
@@ -34,7 +33,7 @@ def get_table():
     content = get_content()
     soup = BeautifulSoup(content.text, "html.parser")
     names = "Country_Other Primary Key,TotalCase,NewCases,TotalDeaths,NewDeaths,TotalRecovered" \
-            ",ActiveCase,Serious_Critical,Tot_Cases_per_1M pop"
+            ",ActiveCase,Serious_Critical,Tot_Cases_per_1_pop,Last_Updated,PRIMARY KEY(Country_Other, Last_Updated)"
     all_stats = list()
     for row in soup.find_all('tr'):
         row_soup = row.find_all('td')
@@ -46,8 +45,9 @@ def get_table():
             if not row_entry.replace('.', '', 1).isdigit():  # check if it is not a number
                 row_entry = ("\"" + row_entry + "\"")
             row_stats.append(row_entry)
-        if row_stats == [] or row_stats[0] == "Total:":
+        if not row_stats:
             continue
+        row_stats.append("\"" + str(format_minutes(datetime.now())) + "\"")
         print(str.join(",", row_stats))
         all_stats.append(str.join(",", row_stats))
     return names, all_stats

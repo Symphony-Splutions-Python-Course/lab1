@@ -1,4 +1,3 @@
-
 import sqlite3 as sql
 from utils.scrape import get_table, DATABASE_NAME
 from utils.date_handler import *
@@ -64,17 +63,7 @@ class Database:
         self.add_row(stats, table_name=table)
 
     @staticmethod
-    def is_up_to_date():
-        global LAST_UPDATED_DATE
-        if LAST_UPDATED_DATE is None:
-            LAST_UPDATED_DATE = datetime.now()
-            return False
-        if format_date(datetime.now()) != format_date(LAST_UPDATED_DATE):
-            return False
-        return True
-
-    @staticmethod
-    def print(self, result):
+    def print(result):
         for row in result:
             print(row)
 

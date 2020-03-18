@@ -5,7 +5,6 @@ from utils.scrape import *
 from json import dumps
 
 
-
 class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
 
     def do_GET(self):
@@ -21,9 +20,6 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
             self.wfile.write(str_to_bin(get_stats()))
         except BrokenPipeError:
             print(BrokenPipeError.args)
-
-
-
 
 
 def str_to_bin(string):
