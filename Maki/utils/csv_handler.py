@@ -1,6 +1,6 @@
-from lab1.Maki.utils.constants import *
-from lab1.Maki.utils.date_handler import *
-from lab1.Maki.utils.scrape import get_stats
+from  utils.constants import *
+from  utils.date_handler import *
+from  utils.scrape import get_stats
 from os import path
 
 

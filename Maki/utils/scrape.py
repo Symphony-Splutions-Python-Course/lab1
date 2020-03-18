@@ -3,9 +3,9 @@ from datetime import datetime
 from bs4 import BeautifulSoup
 import requests
 import re
-from lab1.Maki.utils.constants import *
-from lab1.Maki.utils.date_handler import *
-from lab1.Maki.utils.cache_handler import *
+from utils.constants import *
+from utils.date_handler import *
+from utils.cache_handler import *
 
 
 
@@ -42,7 +42,7 @@ def get_table():
         for entry in row_soup:
             row_entry = entry.text.strip().replace("+", "").replace(",", "").replace(" ", "_")
             if len(row_entry) == 0:
-                row_entry = "0"  # TODO: NULL type for sql
+                row_entry = "NULL"  # TODO: NULL type for sql
             if not row_entry.replace('.', '', 1).isdigit():  # check if it is not a number
                 row_entry = ("\"" + row_entry + "\"")
             row_stats.append(row_entry)

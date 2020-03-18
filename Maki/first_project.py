@@ -1,10 +1,10 @@
 import sys
 from http.server import HTTPServer
 
-from lab1.Maki.utils.cache_handler import set_date_to_cache, get_last_date
-from lab1.Maki.utils.constants import DATABASE_NAME, COUNTRIES_TABLE, PORT_NUMBER, PUBLIC_SERVER_IP
-from lab1.Maki.utils.csv_handler import update_table
-from lab1.Maki.utils.database import Database
+from utils.cache_handler import set_date_to_cache, get_last_date
+from utils.constants import DATABASE_NAME, COUNTRIES_TABLE, PORT_NUMBER, PUBLIC_SERVER_IP
+from utils.csv_handler import update_table
+from utils.database import Database
 
 
 my_db = Database(DATABASE_NAME)
@@ -29,7 +29,7 @@ def update():
 
 
 def run():
-    from lab1.Maki.utils.http_handler import SimpleHTTPRequestHandler
+    from .Maki.utils.http_handler import SimpleHTTPRequestHandler
     httpd = HTTPServer((PUBLIC_SERVER_IP, PORT_NUMBER), SimpleHTTPRequestHandler)
     httpd.serve_forever()
 

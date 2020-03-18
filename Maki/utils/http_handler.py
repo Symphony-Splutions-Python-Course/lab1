@@ -1,7 +1,7 @@
 from http.server import HTTPServer, BaseHTTPRequestHandler
-from lab1.Maki.utils.constants import *
+from utils.constants import *
 
-from lab1.Maki.utils.scrape import *
+from utils.scrape import *
 from json import dumps
 
 
@@ -9,7 +9,7 @@ from json import dumps
 class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
 
     def do_GET(self):
-        from lab1.Maki.first_project import update
+        from first_project import update
         self.send_response(200)
 
         self.send_header('last-modified', format_date(get_last_date()))

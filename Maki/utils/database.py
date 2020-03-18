@@ -1,7 +1,7 @@
 
 import sqlite3 as sql
-from lab1.Maki.utils.scrape import get_table, DATABASE_NAME
-from lab1.Maki.utils.date_handler import *
+from utils.scrape import get_table, DATABASE_NAME
+from utils.date_handler import *
 
 
 def main():

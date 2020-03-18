@@ -1,6 +1,6 @@
 import memcache
 
-from lab1.Maki.utils.constants import LOCAL_SERVER_IP, STATS_KEY, STATS_DB_KEY, DATE_KEY
+from utils.constants import LOCAL_SERVER_IP, STATS_KEY, STATS_DB_KEY, DATE_KEY
 from datetime import datetime
 
 CACHE = memcache.Client(LOCAL_SERVER_IP)

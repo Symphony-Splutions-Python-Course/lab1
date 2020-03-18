@@ -1,5 +1,5 @@
 from datetime import datetime
-from lab1.Maki.utils.cache_handler import get_last_date
+from utils.cache_handler import get_last_date
 
 
 def now():
