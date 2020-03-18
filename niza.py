@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 print("Niza")
 
 n=10
