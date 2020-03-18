@@ -33,7 +33,7 @@ def get_table():
     """returns a list of lists of all the table entries"""
     content = get_content()
     soup = BeautifulSoup(content.text, "html.parser")
-    names = "Country_Other,TotalCase,NewCases,TotalDeaths,NewDeaths,TotalRecovered" \
+    names = "Country_Other Primary Key,TotalCase,NewCases,TotalDeaths,NewDeaths,TotalRecovered" \
             ",ActiveCase,Serious_Critical,Tot_Cases_per_1M pop"
     all_stats = list()
     for row in soup.find_all('tr'):
