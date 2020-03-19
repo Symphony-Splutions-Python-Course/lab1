@@ -1,12 +1,11 @@
 import configparser
 
 parser = configparser.ConfigParser()
-# try:
-file = open("/home/makikaka/SymphonySolutions/lab1/Maki/utils/config.ini", 'r')
-parser.read(file)
-# except FileNotFoundError:
-#     print("Please crate a config file")
-#     exit(1)
+try:
+    parser.read('config.ini')
+except FileNotFoundError:
+    print("Please crate a config file")
+    exit(1)
 print(parser.sections())
 for key in parser.keys():
     print(key)
