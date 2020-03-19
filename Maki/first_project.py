@@ -29,7 +29,6 @@ def update():
         set_date_to_cache()
 
 
-
 def run():
     from utils.http_handler import SimpleHTTPRequestHandler
     httpd = HTTPServer((PUBLIC_SERVER_IP, PORT_NUMBER), SimpleHTTPRequestHandler)

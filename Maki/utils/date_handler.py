@@ -6,7 +6,7 @@ def now():
     datetime.now()
 
 
-def format_date(date):
+def format_date(date=datetime.now()):
     return date.strftime("%b %d %Y %H")
 
 
