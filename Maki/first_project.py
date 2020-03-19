@@ -1,6 +1,6 @@
 import sys
 from http.server import HTTPServer
-
+import os
 from utils.cache_handler import set_date_to_cache, get_last_date
 from utils.constants import DATABASE_NAME, COUNTRIES_TABLE, PORT_NUMBER, PUBLIC_SERVER_IP
 from utils.csv_handler import update_table
