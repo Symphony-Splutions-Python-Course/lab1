@@ -4,9 +4,7 @@ import sys
 
 parser = configparser.ConfigParser()
 try:
-<<<<<<< HEAD
     filename = os.path.join(os.path.abspath(os.path.dirname(sys.argv[0])), "utils/", "configs.ini")
-    print(filename)
     with open(filename, 'r') as configfile:
         try:
             parser.read(filename)
@@ -15,16 +13,6 @@ try:
 except FileNotFoundError:
     print("File not found")
     exec(open(os.path.abspath("configs.ini")).read())
-=======
-    f = open("config.ini", 'r')
-    parser.read_file(f)
-except FileNotFoundError:
-    exec(open("configurations.py").read())
->>>>>>> a4b7f57f0e217de32fba080e9cddaef21fdc0d2e
-    exit(1)
-print(parser.sections())
-for key in parser.keys():
-    print(key)
 ATTRIBUTE_NAMES = parser['file']['att_names']
 ATTRIBUTE_NAMES_DB = parser["DB"]['att_names_db']
 URL = parser["HTTP"]['URL']

@@ -11,9 +11,6 @@ my_db = Database(DATABASE_NAME)
 
 
 def main():
-    if get_last_date() is None:
-        set_date_to_cache(None)
-
     if len(sys.argv) > 1:
         if sys.argv[1] == '--https':
             run()
@@ -25,11 +22,12 @@ def main():
 
 def update():
     from utils.date_handler import is_outdated
+    print("Upating..." if is_outdated() else "Up to date")
     if is_outdated():
         my_db.update_table(COUNTRIES_TABLE)
         update_table()  # csv table
         set_date_to_cache()
-        print(is_outdated())
+
 
 
 def run():

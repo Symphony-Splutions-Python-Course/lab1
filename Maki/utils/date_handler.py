@@ -11,7 +11,6 @@ def format_date(date):
 
 
 def diff_in_seconds(date1=get_last_date(), date2=datetime.now()):
-    a = abs((date1.second - date2.second))
     return abs((date1.second - date2.second))
 
 
