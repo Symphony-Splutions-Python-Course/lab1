@@ -1,12 +1,20 @@
 import configparser
+import os
+import sys
 
 parser = configparser.ConfigParser()
-# try:
-file = open("/home/makikaka/SymphonySolutions/lab1/Maki/utils/config.ini", 'r')
-parser.read(file)
-# except FileNotFoundError:
-#     print("Please crate a config file")
-#     exit(1)
+try:
+    filename = os.path.join(os.path.abspath(os.path.dirname(sys.argv[0])), "utils/", "configs.ini")
+    print(filename)
+    with open(filename, 'r') as configfile:
+        try:
+            parser.read(filename)
+        except configparser.MissingSectionHeaderError:
+            print("No header")
+except FileNotFoundError:
+    print("File not found")
+    exec(open(os.path.abspath("configs.ini")).read())
+    exit(1)
 print(parser.sections())
 for key in parser.keys():
     print(key)

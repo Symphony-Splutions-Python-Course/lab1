@@ -50,7 +50,6 @@ def get_table():
         if row_stats[0].strip() == "\"Total:\"":
             break
         row_stats.append("\"" + str(format_minutes(datetime.now())) + "\"")
-        print(row_soup)
         all_stats.append(str.join(",", row_stats))
     return names, all_stats
 

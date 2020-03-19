@@ -6,8 +6,8 @@ from datetime import datetime
 CACHE = memcache.Client(LOCAL_SERVER_IP)
 
 
-def set_date_to_cache():
-    CACHE.set(DATE_KEY, datetime.now())
+def set_date_to_cache(date=datetime.now()):
+    CACHE.set(DATE_KEY, date)
 
 
 def set_stats_to_cache(content):
@@ -19,8 +19,7 @@ def set_table_to_cache(content, table_name):
 
 
 def get_last_date():
-    ret = CACHE.get(DATE_KEY)
-    return ret
+    return CACHE.get(DATE_KEY)
 
 
 def get_table_cache(table_name):

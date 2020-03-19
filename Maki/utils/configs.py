@@ -39,5 +39,5 @@ parser["mc_keys"] = {
     'database_key': "db_key1"
 }
 
-file = open("config.ini", "w")
-parser.write(file)
+with open("configs.ini", "w") as configfile:
+    parser.write(configfile)
