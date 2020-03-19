@@ -2,9 +2,10 @@ import configparser
 
 parser = configparser.ConfigParser()
 try:
-    parser.read('config.ini')
+    f = open("config.ini", 'r')
+    parser.read_file(f)
 except FileNotFoundError:
-    print("Please crate a config file")
+    exec(open("configurations.py").read())
     exit(1)
 print(parser.sections())
 for key in parser.keys():
