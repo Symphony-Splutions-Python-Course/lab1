@@ -1,0 +1,2 @@
+# Covid19
+    Use it to start a http server loacally and upload the current coronavirus total world statistics. Also keep your local databser with info aboyt all the countries up to date with resolution of 5 minutes.
