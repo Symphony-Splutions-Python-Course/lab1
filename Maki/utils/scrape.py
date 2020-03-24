@@ -6,10 +6,7 @@ import re
 from utils.constants import *
 from utils.date_handler import *
 from utils.cache_handler import *
-
-
-def main():
-    get_table()
+import logging
 
 
 def format_table_row(row):
@@ -17,7 +14,7 @@ def format_table_row(row):
     if pattern_row.groups < 9:
         return
     pattern_space = re.compile("^\ *\ $")
-    print(row)
+    logging.debug(row)
     groups = pattern_row.match(row)
     table_row = list()
     for i in range(3, 10):
@@ -67,7 +64,3 @@ def get_stats():
         stats_csv = str.join(",", table_stats)
         set_stats_to_cache(stats_csv)
     return get_stats_from_cache()
-
-
-if __name__ == '__main__':
-    main()

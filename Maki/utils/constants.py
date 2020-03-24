@@ -1,6 +1,8 @@
 import configparser
 import os
 import sys
+import logging
+
 
 parser = configparser.ConfigParser()
 try:
@@ -9,9 +11,9 @@ try:
         try:
             parser.read(filename)
         except configparser.MissingSectionHeaderError:
-            print("No header")
+            logging.error(print("No header"))
 except FileNotFoundError:
-    print("File not found")
+    logging.error("File not found")
     exec(open(os.path.abspath("configs.ini")).read())
 ATTRIBUTE_NAMES = parser['file']['att_names']
 ATTRIBUTE_NAMES_DB = parser["DB"]['att_names_db']
