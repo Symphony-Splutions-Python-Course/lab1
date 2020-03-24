@@ -1,5 +1,5 @@
 from datetime import datetime
-from utils.cache_handler import get_last_date
+from my_helpers.cache_handler import get_last_date
 
 
 def now():

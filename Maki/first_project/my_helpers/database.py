@@ -1,8 +1,7 @@
 import sqlite3 as sql
-from utils.scrape import get_table, DATABASE_NAME
-from utils.date_handler import *
+from my_helpers.scrape import get_table, DATABASE_NAME
+from my_helpers.date_handler import *
 import logging
-
 
 class Database:
     # how to make Database inherit and also put new fields. sql.connection is written in C
@@ -25,10 +24,7 @@ class Database:
         self.connection.commit()
 
     def add_row_input(self):
-        self.execute("INSERT INTO " + input("Enter table name:").strip() + " VALUES" +
-                     "(" + self.input_row() + ")")
-        logging.debug("INSERT INTO " + input("Enter table name:").strip() + " VALUES" +
-                      "(" + self.input_row() + ")")
+       pass
 
     def add_row(self, values, table_name):
         table_name = table_name.strip()
@@ -69,13 +65,6 @@ class Database:
         if attributes.strip() == 0:
             logging.warning("Nothing entered for table")
             return None
-        # TODO: implement
-        if table_name not in str(self.tables.keys()):
-            pass
-
-        # TODO: implement
-        for att in attributes.split(","):
-            pass
 
         if len(conditions.strip()) == 0:
             self.execute("SELECT " + attributes + " FROM " + table_name)

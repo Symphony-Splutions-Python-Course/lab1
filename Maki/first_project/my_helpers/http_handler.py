@@ -1,7 +1,7 @@
 from http.server import HTTPServer, BaseHTTPRequestHandler
-from utils.constants import *
+from my_helpers.constants import *
 
-from utils.scrape import *
+from my_helpers.scrape import *
 from json import dumps
 
 

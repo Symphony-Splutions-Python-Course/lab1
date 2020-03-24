@@ -1,10 +1,11 @@
 import sys
 from http.server import HTTPServer
 import os
-from utils.cache_handler import set_date_to_cache, get_last_date
-from utils.constants import DATABASE_NAME, COUNTRIES_TABLE, PORT_NUMBER, PUBLIC_SERVER_IP
-from utils.csv_handler import update_table
-from utils.database import Database
+from my_helpers.cache_handler import set_date_to_cache, get_last_date
+from my_helpers.constants import DATABASE_NAME, COUNTRIES_TABLE, PORT_NUMBER, PUBLIC_SERVER_IP
+from my_helpers.csv_handler import update_table
+from my_helpers.database import Database
+
 import logging
 
 my_db = Database(DATABASE_NAME)
@@ -21,7 +22,7 @@ def main():
 
 
 def update():
-    from utils.date_handler import is_outdated
+    from my_helpers.date_handler import is_outdated
     logging.info("Upating..." if is_outdated() else "Up to date")
     if is_outdated():
         my_db.update_table(COUNTRIES_TABLE)
@@ -30,7 +31,7 @@ def update():
 
 
 def run_http():
-    from utils.http_handler import SimpleHTTPRequestHandler
+    from my_helpers.http_handler import SimpleHTTPRequestHandler
     httpd = HTTPServer((PUBLIC_SERVER_IP, PORT_NUMBER), SimpleHTTPRequestHandler)
     httpd.serve_forever()
 

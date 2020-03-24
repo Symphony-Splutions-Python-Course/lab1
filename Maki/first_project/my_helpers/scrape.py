@@ -3,9 +3,9 @@ from datetime import datetime
 from bs4 import BeautifulSoup
 import requests
 import re
-from utils.constants import *
-from utils.date_handler import *
-from utils.cache_handler import *
+from my_helpers.constants import *
+from my_helpers.date_handler import *
+from my_helpers.cache_handler import *
 import logging
 
 
@@ -30,7 +30,7 @@ def get_table():
     content = get_content()
     soup = BeautifulSoup(content.text, "html.parser")
     names = "Country_Other,TotalCase,NewCases,TotalDeaths,NewDeaths,TotalRecovered" \
-            ",ActiveCase,Serious_Critical,Tot_Cases_per_1_pop,Last_Updated,PRIMARY KEY(Country_Other, Last_Updated)"
+            ",ActiveCase,Serious_Critical,Tot_Cases_per_1_pop,Tot_Deaths_per_1_pop,Last_Updated,PRIMARY KEY(Country_Other, Last_Updated)"
     all_stats = list()
     for row in soup.find_all('tr'):
         row_soup = row.find_all('td')
@@ -47,6 +47,7 @@ def get_table():
         if row_stats[0].strip() == "\"Total:\"":
             break
         row_stats.append("\"" + str(format_minutes(datetime.now())) + "\"")
+        print(row_stats)
         all_stats.append(str.join(",", row_stats))
     return names, all_stats
 

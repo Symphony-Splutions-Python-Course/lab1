@@ -6,7 +6,8 @@ import logging
 
 parser = configparser.ConfigParser()
 try:
-    filename = os.path.join(os.path.abspath(os.path.dirname(sys.argv[0])), "utils/", "configs.ini")
+    filename = os.path.join(os.path.abspath(os.path.dirname(sys.argv[0])), "my_helpers/", "configs.ini")
+    print(filename)
     with open(filename, 'r') as configfile:
         try:
             parser.read(filename)
