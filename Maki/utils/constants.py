@@ -1,28 +1,30 @@
+import configparser
 
-ATTRIBUTE_NAMES = 'Date,Total_Cases,New_Cases,Total_Deaths,New_Deaths,Total_Recovered,Active_cases,' \
-                  'Serious_or_Critical,' \
-                  'Total_Cases_per_1M '
+parser = configparser.ConfigParser()
+# try:
+file = open("/home/makikaka/SymphonySolutions/lab1/Maki/utils/config.ini", 'r')
+parser.read(file)
+# except FileNotFoundError:
+#     print("Please crate a config file")
+#     exit(1)
+print(parser.sections())
+for key in parser.keys():
+    print(key)
+ATTRIBUTE_NAMES = parser['file']['att_names']
+ATTRIBUTE_NAMES_DB = parser["DB"]['att_names_db']
+URL = parser["HTTP"]['URL']
+LOCAL_SERVER_IP = parser["HTTP"]['local_server_ip']
+PUBLIC_SERVER_IP = parser["HTTP"]['public_server_ip']
+PORT_NUMBER = parser["HTTP"]['port_number']
 
-ATTRIBUTE_NAMES_DB = 'Date,Total_Cases text,New_Cases integer,Total_Deaths integer,New_Deaths integer,Total_Recovered integer,Active_cases integer,' \
-                     'Serious_or_Critical integer,' \
-                     'Total_Cases_per_1M real'
+CSV_FILE_NAME = parser["file"]['file_name']
+DATABASE_NAME = parser["DB"]['db_name']
+COVID_TABLE = parser["DB"]['stats_table']
 
-URL = "https://www.worldometers.info/coronavirus/?fbclid=IwAR1OutjUurc_K" \
-      "4BH9F4smkLpC0yKfndoShfUtrs4cJZehqS7PQs0Ek85Xlw"
+STATS_DB_KEY = parser["mc_keys"]['stats_db_key']
+STATS_KEY = parser["mc_keys"]['stats_key']
+DATE_KEY = parser["mc_keys"]['date_key']
+HEADER_KEY = parser["mc_keys"]['header_key']
+DATABASE_KEY = parser["mc_keys"]['database_key']
 
-LOCAL_SERVER_IP = "127.0.0.1"
-PUBLIC_SERVER_IP = "0.0.0.0"
-PORT_NUMBER = 2021
-CSV_FILE_NAME = "stats_covid19.csv"
-DATABASE_NAME = "covid19.db"
-COVID_TABLE = "covid_19"
-
-STATS_DB_KEY = "stats_db"
-STATS_KEY = "stats"
-DATE_KEY = "last_datetime_key"
-HEADER_KEY = 'key_header'
-DATABASE_KEY = "db_key1"
-
-COUNTRIES_TABLE = "countries"
-
-my_db = None
+COUNTRIES_TABLE = parser["DB"]['countries_table']
