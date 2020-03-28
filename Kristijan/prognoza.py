@@ -15,8 +15,8 @@ URL = "https://sitel.com.mk/meteo"
 
 file_name = "prognoza.txt"
 #my_server = "0.0.0.0"
-#server = "127.0.0.1"
-#port = 9000
+server = "127.0.0.1"
+port = 9000
 #mc = memcache.Client(server)
 today_date = datetime.date.today()
 weather_stats = []
@@ -33,8 +33,8 @@ def main():
         write_to_file()
     elif str(today_date) not in lines[-1]:
         update_file()
-    #elif len(sys.argv) > 1 and sys.argv[1] == '--http':
-        #run(HTTPServer, BaseHTTPRequestHandler)
+    elif len(sys.argv) > 1 and sys.argv[1] == '--http':
+        run(HTTPServer, BaseHTTPRequestHandler)
   
 
 def scraping_stats():
@@ -73,18 +73,24 @@ def create_file():
     else:
         pass
 
-#class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
+class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
 
-    #def do_GET(self):
-        #self.send_response(200)
-        #self.end_headers()
-        #update_table()
-        #self.wfile.write(str_to_bin(scrape_stats(get_content())))
+    def do_GET(self):
+        self.send_response(200)
+        self.end_headers()
+        proba=bytes(str(get_lines_from_file()), encoding='utf-8')
+        self.wfile.write(bytes(str(get_lines_from_file()), encoding='utf-8'))
+        
 
 
-#def run(server_class, handler_class):
-    #httpd = HTTPServer((my_server_IP, port), SimpleHTTPRequestHandler)
-    #httpd.serve_forever()
+def run(server_class, handler_class):
+    httpd = HTTPServer((server, port), SimpleHTTPRequestHandler)
+    httpd.serve_forever()
+
+#def str_to_bin():
+    #res = ''.join(map(bin, bytearray(str(get_lines_from_file()),'utf-8')))
+    #res = res.encode()
+    #return res
 
 if __name__ == "__main__":
     main()
