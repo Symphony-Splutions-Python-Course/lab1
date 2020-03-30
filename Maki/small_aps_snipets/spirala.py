@@ -1,4 +1,8 @@
+from sys import stdout
+
+
 def print_matrix_spiral(matrix, min_row, min_column, max_column, max_row):
+
     while min_row < max_row and min_column < max_column:
 
         # i stays the same | j++
@@ -20,6 +24,10 @@ def print_matrix_spiral(matrix, min_row, min_column, max_column, max_row):
         for i in range(max_row - 1, min_row - 1, -1):
             print(matrix[i][min_column], end=', ')
         min_column += 1
+
+    # remove the last ", " from the print statement
+    stdout.write("\b\b")
+    stdout.close()
 
 
 if __name__ == '__main__':
