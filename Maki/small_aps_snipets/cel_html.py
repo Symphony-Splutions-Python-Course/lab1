@@ -5,11 +5,12 @@ import memcache
 from datetime import datetime
 from datetime import date
 from http.server import HTTPServer, BaseHTTPRequestHandler
+import sys
 
 
 today = date.today()
 
-URL = "https://www.facebook.com/"
+URL = sys.argv[1]
 
 server_IP = "0.0.0.0"
 my_server_IP = "0.0.0.0"
