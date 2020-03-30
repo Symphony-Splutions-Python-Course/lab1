@@ -1,13 +1,7 @@
 import sqlite3 as sql
-from utils.scrape import get_table, DATABASE_NAME
-from utils.date_handler import *
-
-
-def main():
-    pass
-    # db = Database(DATABASE_NAME)
-    # db.create_table("countries", name)
-
+from my_helpers.scrape import get_table, DATABASE_NAME
+from my_helpers.date_handler import *
+import logging
 
 class Database:
     # how to make Database inherit and also put new fields. sql.connection is written in C
@@ -18,7 +12,7 @@ class Database:
         self.cursor = self.connection.cursor()
 
     def execute(self, command, values=None):
-        print(command)
+        logging.debug(command)
         if values is None:
             self.cursor.execute(command)
             self.commit()
@@ -30,10 +24,7 @@ class Database:
         self.connection.commit()
 
     def add_row_input(self):
-        self.execute("INSERT INTO " + input("Enter table name:").strip() + " VALUES" +
-                     "(" + self.input_row() + ")")
-        print("INSERT INTO " + input("Enter table name:").strip() + " VALUES" +
-              "(" + self.input_row() + ")")
+       pass
 
     def add_row(self, values, table_name):
         table_name = table_name.strip()
@@ -41,8 +32,7 @@ class Database:
             self.execute("INSERT INTO " + table_name + " VALUES(" + values + ")")
             self.commit()
         except sql.IntegrityError:
-            print("Unique constraint violated")
-
+            logging.error("IntegrityError. On INSERT. Most likely Unique constraint violation")
 
     def create_table_input(self):
         table_name = input("Enter table name: ")
@@ -55,7 +45,7 @@ class Database:
         try:
             self.execute("CREATE TABLE " + table_name.strip() + "(" + att.strip() + ")")
         except sql.OperationalError:
-            print("Table exists")
+            logging.error("Table exists")
 
     def show_tables(self):
         print(self.tables)
@@ -73,15 +63,8 @@ class Database:
 
     def select(self, attributes, table_name, conditions=""):
         if attributes.strip() == 0:
-            print("Nothing entered for table")
+            logging.warning("Nothing entered for table")
             return None
-        # TODO: implement
-        if table_name not in str(self.tables.keys()):
-            pass
-
-        # TODO: implement
-        for att in attributes.split(","):
-            pass
 
         if len(conditions.strip()) == 0:
             self.execute("SELECT " + attributes + " FROM " + table_name)
@@ -123,7 +106,3 @@ class Database:
         if is_outdated():
             for row in rows:
                 self.add_row(row, table_name)
-
-
-if __name__ == "__main__":
-    main()

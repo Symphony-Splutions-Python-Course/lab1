@@ -1,7 +1,7 @@
 from http.server import HTTPServer, BaseHTTPRequestHandler
-from utils.constants import *
+from my_helpers.constants import *
 
-from utils.scrape import *
+from my_helpers.scrape import *
 from json import dumps
 
 
@@ -20,6 +20,9 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
             self.wfile.write(str_to_bin(get_stats()))
         except BrokenPipeError:
             print(BrokenPipeError.args)
+
+
+
 
 
 def str_to_bin(string):

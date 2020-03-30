@@ -5,17 +5,17 @@ import memcache
 from datetime import datetime
 from datetime import date
 from http.server import HTTPServer, BaseHTTPRequestHandler
+import sys
 
 
 today = date.today()
 
-URL = "https://www.worldometers.info/coronavirus/?fbclid=IwAR1OutjUurc_K" \
-      "4BH9F4smkLpC0yKfndoShfUtrs4cJZehqS7PQs0Ek85Xlw"
+URL = sys.argv[1]
 
-server_IP = "127.0.0.1"
+server_IP = "0.0.0.0"
 my_server_IP = "0.0.0.0"
 
-key_c = "content"
+key_c = "content_"
 key_date = "last_datetime_"
 
 cache = memcache.Client(server_IP)
@@ -30,11 +30,11 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
     def do_GET(self):
         self.send_response(200)
         self.end_headers()
-        self.wfile.write(str_to_bin(scrape_stats(get_content())))
+        self.wfile.write(str_to_bin((get_content())))
 
 
 def run(server_class, handler_class):
-    httpd = HTTPServer((my_server_IP, 2019), SimpleHTTPRequestHandler)
+    httpd = HTTPServer((my_server_IP, 2020), SimpleHTTPRequestHandler)
     httpd.serve_forever()
 
 
@@ -50,7 +50,8 @@ def get_content():
     if content is None:
         content = requests.get(URL)
     set_date_to_mc()
-    return content
+    print(type(BeautifulSoup(content.text, "html.parser")))
+    return content.text
 
 
 def scrape_stats(content):
@@ -62,7 +63,7 @@ def scrape_stats(content):
 
 
 def str_to_bin(string):
-    return bytes(string + '\n', 'ASCII')
+    return bytes(string, 'utf-8')
 
 
 def set_date_to_mc():
