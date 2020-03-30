@@ -34,7 +34,7 @@ if __name__ == '__main__':
         matrix[i] = [0]*n
     for i in range (0,m):
         for j in range (0,n):
-            print ('entry in row: ',i+1,' column: ',j+1)
+            print ('vnesi vo red: ',i+1,' kolona: ',j+1)
             matrix[i][j] = input()
     
     max_column = len(matrix[0])
@@ -43,4 +43,4 @@ if __name__ == '__main__':
     min_row = 0
     min_column = 0
 
-    print_matrix_spiral(matrix, min_row, min_column, max_column, max_row)
+    print_matrix_spiral(matrix, min_row, min_column, max_column, max_row) 
