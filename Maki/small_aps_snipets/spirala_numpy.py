@@ -3,7 +3,7 @@ from sys import stdout
 
 
 def print_matrix_spiral(matrix):
-    
+
     while True:
         for i in range(len(matrix[0])):
             print(matrix[0, i], end=", ")
