@@ -78,19 +78,16 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
     def do_GET(self):
         self.send_response(200)
         self.end_headers()
-        proba=bytes(str(get_lines_from_file()), encoding='utf-8')
-        self.wfile.write(bytes(str(get_lines_from_file()), encoding='utf-8'))
+        self.wfile.write('<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Prognoza Sitel TV</title></head><body>'.encode('utf-8'))
+        for line in get_lines_from_file():
+            self.wfile.write('{}<br>'.format(line).encode('utf-8'))
+        self.wfile.write('</body></html>'.encode('utf-8'))
         
-
+        
 
 def run(server_class, handler_class):
     httpd = HTTPServer((server, port), SimpleHTTPRequestHandler)
     httpd.serve_forever()
-
-#def str_to_bin():
-    #res = ''.join(map(bin, bytearray(str(get_lines_from_file()),'utf-8')))
-    #res = res.encode()
-    #return res
 
 if __name__ == "__main__":
     main()
